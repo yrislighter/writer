@@ -1,0 +1,182 @@
+import React, { useState } from 'react';
+import { ChevronRight, Share2, Download, RefreshCw, Heart, Sun } from 'lucide-react';
+
+/**
+ * 2026 Young Poets Special Event Page
+ * Concept: 'Fragments of Spring' - Embedding user word into the poem body.
+ */
+const App = () => {
+  const [step, setStep] = useState('intro'); // intro, input, result
+  const [word, setWord] = useState('');
+
+  const handleComplete = () => {
+    if (word.trim()) {
+      setStep('result');
+    }
+  };
+
+  const reset = () => {
+    setStep('intro');
+    setWord('');
+  };
+
+  // 봄의 정취를 담은 감성적인 배경 이미지 (Unsplash)
+  const bgImage = "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=1000";
+
+  return (
+    <div className="min-h-screen bg-[#fafaf8] text-[#333] font-serif selection:bg-[#e8e4d8] overflow-hidden flex flex-col">
+      {/* Global Grain Overlay for Texture */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-50" 
+           style={{backgroundImage: `url('https://grainy-gradients.vercel.app/noise.svg')`}}></div>
+
+      {/* Header */}
+      <header className="p-8 flex justify-between items-center z-10">
+        <h1 className="text-xs tracking-[0.3em] font-light uppercase text-stone-500">2026 Young Poets</h1>
+        {step !== 'intro' && (
+          <button 
+            onClick={reset} 
+            className="text-[10px] uppercase tracking-widest border-b border-stone-300 pb-1 hover:border-black transition-colors"
+          >
+            Reset
+          </button>
+        )}
+      </header>
+
+      <main className="flex-1 flex flex-col items-center justify-center p-6 relative">
+        {/* Step 1: Intro */}
+        {step === 'intro' && (
+          <div className="max-w-md w-full space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-1000 text-center">
+            <div className="space-y-6">
+              <div className="flex justify-center mb-4">
+                <Sun size={20} className="text-orange-300 animate-pulse" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-light leading-tight tracking-tight">
+                다시, <br />봄을 적습니다
+              </h2>
+              <p className="text-sm font-sans text-stone-400 leading-relaxed tracking-wide">
+                당신의 마음속에 피어난 <br />
+                단 하나의 단어를 들려주세요.
+              </p>
+            </div>
+            <button 
+              onClick={() => setStep('input')}
+              className="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-medium transition duration-300 ease-out border border-[#333] rounded-full shadow-md"
+            >
+              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#333] group-hover:translate-x-0 ease">
+                <ChevronRight size={20} />
+              </span>
+              <span className="absolute flex items-center justify-center w-full h-full text-[#333] transition-all duration-300 transform group-hover:translate-x-full ease tracking-[0.2em] text-xs">문장 시작하기</span>
+              <span className="relative invisible text-xs tracking-[0.2em]">문장 시작하기</span>
+            </button>
+          </div>
+        )}
+
+        {/* Step 2: Single Word Input */}
+        {step === 'input' && (
+          <div className="max-w-2xl w-full flex flex-col items-center animate-in fade-in duration-1000">
+            <div className="text-center mb-16 space-y-4">
+              <span className="text-[10px] text-orange-400 font-sans uppercase tracking-[0.3em]">Spring Reflection</span>
+              <h3 className="text-3xl md:text-4xl font-light">
+                봄 하면 생각나는 <br className="md:hidden" />단어가 있나요?
+              </h3>
+            </div>
+
+            <div className="w-full max-w-md relative">
+              <input 
+                type="text"
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleComplete()}
+                placeholder="단어를 입력하세요"
+                className="w-full bg-transparent border-b border-stone-200 py-6 text-2xl md:text-3xl text-center outline-none focus:border-orange-200 transition-all font-light placeholder:text-stone-200"
+                autoFocus
+              />
+              <div className="mt-8 flex justify-center">
+                <button 
+                  onClick={handleComplete}
+                  disabled={!word.trim()}
+                  className="p-4 rounded-full bg-stone-50 text-stone-400 hover:text-black hover:bg-stone-100 disabled:opacity-20 transition-all"
+                >
+                  <ChevronRight size={32} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Result (Poem Card) */}
+        {step === 'result' && (
+          <div className="max-w-3xl w-full animate-in zoom-in-95 fade-in duration-1000 flex flex-col items-center">
+            {/* Poetry Card Container */}
+            <div className="bg-white p-12 md:p-24 shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative overflow-hidden w-full max-w-[480px] aspect-[3/4] flex flex-col justify-between">
+              {/* Soft Background Texture/Image */}
+              <div 
+                className="absolute inset-0 opacity-[0.07] grayscale pointer-events-none transition-transform duration-[20s] hover:scale-110"
+                style={{backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}
+              />
+              
+              <div className="relative z-10 text-center">
+                 <p className="text-[10px] uppercase tracking-[0.4em] text-stone-300 mb-16">Poetry of 2026</p>
+              </div>
+
+              <div className="relative z-10 space-y-8 text-center">
+                <div className="space-y-2">
+                  <span className="text-xs text-orange-300 font-sans tracking-widest uppercase">Title</span>
+                  <h2 className="text-4xl font-light tracking-tight text-[#222]">
+                    {word}
+                  </h2>
+                </div>
+                
+                <div className="w-4 h-px bg-stone-200 mx-auto my-8" />
+
+                <div className="space-y-4 text-base md:text-lg leading-relaxed font-light text-stone-600 italic">
+                  <p>수많은 계절을 지나</p>
+                  <p>우리가 다시 마주한 풍경 속에</p>
+                  <p>
+                    당신의 <span className="not-italic font-medium text-[#222] border-b border-orange-200/50">{word}</span>(이)가
+                  </p>
+                  <p>가장 먼저 기지개를 켭니다.</p>
+                </div>
+              </div>
+
+              <div className="relative z-10 pt-16 text-center">
+                <p className="text-[10px] font-sans text-stone-300 tracking-[0.2em] uppercase">2026 Young Poets Archive</p>
+              </div>
+            </div>
+
+            {/* Post-Action Buttons */}
+            <div className="mt-12 flex gap-6 animate-in fade-in slide-in-from-top-4 delay-700 duration-1000">
+              <button 
+                className="p-3 text-stone-400 hover:text-black transition-colors" 
+                title="이미지로 저장"
+                onClick={() => window.print()}
+              >
+                <Download size={20} />
+              </button>
+              <button className="p-3 text-stone-400 hover:text-black transition-colors" title="공유하기">
+                <Share2 size={20} />
+              </button>
+              <button onClick={reset} className="p-3 text-stone-400 hover:text-black transition-colors" title="다시하기">
+                <RefreshCw size={20} />
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="p-8 flex justify-between items-center z-10">
+        <div className="text-[9px] uppercase tracking-widest text-stone-300 space-y-1">
+          <p>Location: Seoul, Korea</p>
+          <p>© 2026 Young Poets Collective</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Heart size={14} className="text-orange-200" />
+          <span className="text-[10px] text-stone-300 uppercase tracking-widest font-sans">Special Edition</span>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
